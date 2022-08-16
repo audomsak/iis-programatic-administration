@@ -1,6 +1,27 @@
 # IIS Programatic Administration
 
-## Query Server Infomation using PowerShell
+
+## Summary
+
+| Windows version            | Default PowerShell version | Windows Management Framework (WMF) 5.1 | IIS version | Script type                         | API, Interface             | Remoting                 |
+|----------------------------|--------------------|----------------------------------------|-------------|-------------------------------------|----------------------------|--------------------------|
+| Windows Server 2022        | 5.1                | Installed by default                   | 10          | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2019        | 5.1                | Installed by default                   | 10          | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2016        | 5.1                | Installed by default                   | 10          | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2012 R2     | 4.0                | Need to be installed                   | 8.5         | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2012        | 3.0                | Need to be installed                   | 8           | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2008 R2 SP1 | 2.0                | Need to be installed                   | 7.5         | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2008        | N/A                | N/A                                    | 7.0         | VBScript                            | WMI, AppCmd.exe            | WMI Remoting             |
+| Windows Server 2003        | N/A                | N/A                                    | 6.0         | VBScript                            | WMI                        | WMI Remoting             |
+
+***Note***
+
+1. **IISAdministration** PowerShell module is available only in IIS 10.
+2. PowerShell (old) module for IIS is **WebAdministration**.
+3. **Get-ComputerInfo** PowerShell module requires WMF 5.1 to be installed.
+4. **WebAdministration** WMI Namespace requires **IIS Management Scripts and Tools** Windows feature enabled.
+5. WMI Namespaces for IIS 7.0 and later is **Root\WebAdministration**.
+6. WMI Namespaces for IIS 6.0 is : **Root\MicrosoftIISv2**.
 
 ## References
 

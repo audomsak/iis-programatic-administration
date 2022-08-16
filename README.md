@@ -74,6 +74,8 @@ A repository contains some stuff relate to [PowerShell](https://docs.microsoft.c
 
 * [How to enable access to WMI](https://iphostmonitor.com/kb/remote-wmi-monitoring.html)
 
+* [Creating a WMI Script](https://docs.microsoft.com/en-us/windows/win32/wmisdk/creating-a-wmi-script)
+
 * [Windows Remote Management and WMI](https://docs.microsoft.com/en-us/windows/win32/winrm/windows-remote-management-and-wmi)
 
 ### .NET Framework
