@@ -84,6 +84,8 @@ A repository contains some stuff relate to [PowerShell](https://docs.microsoft.c
 
 * [Overview of .NET Framework release history](https://en.wikipedia.org/wiki/.NET_Framework_version_history#Overview)
 
+* [Migration guide](https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/)
+
 ### Windows
 
 * [Windows previous versions documentation](https://docs.microsoft.com/en-us/previous-versions/windows/)

@@ -3,6 +3,8 @@
 
 ## Summary
 
+Following table is result from this [decision path](decision-path.png).
+
 | Windows version            | Default PowerShell version | Windows Management Framework (WMF) 5.1 | IIS version | Script type                         | API, Interface             | Remoting                 |
 |----------------------------|--------------------|----------------------------------------|-------------|-------------------------------------|----------------------------|--------------------------|
 | Windows Server 2022        | 5.1                | Installed by default                   | 10          | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
