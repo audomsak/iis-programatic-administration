@@ -1,6 +1,5 @@
 # IIS Programatic Administration
 
-
 ## Summary
 
 Following table is result from this [decision path](decision-path.png).

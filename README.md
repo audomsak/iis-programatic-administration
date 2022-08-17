@@ -8,7 +8,6 @@ A repository contains some stuff relate to [PowerShell](https://docs.microsoft.c
 
 [PowerShell: A cheat sheet](https://www.techrepublic.com/article/powershell-the-smart-persons-guide/)
 
-
 ### PowerShell Tutorials
 
 * [Introduction to PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/learn/ps101/00-introduction)
