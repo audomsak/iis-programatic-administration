@@ -18,7 +18,6 @@ function Map-OutputObject {
         $WebAppAppPoolRuntimeVer = $WebappAppPoolObj.ManagedRuntimeVersion -join ';'
     }
 
-
     $OutputObject = [PSCustomObject]@{
                     Dns_HostName                          = $ComputerInfo.CsDNSHostName
                     Os_Name                               = $ComputerInfo.OsName
@@ -265,9 +264,9 @@ Write-Output "-------------------------------"
 Write-Output "| .NET Framework Installation |"
 Write-Output "-------------------------------"
 
-Get-ChildItem ‘HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP’ -Recurse |
+Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -Recurse |
   Get-ItemProperty -Name version -EA 0 |
-  Where { $_.PSChildName -Match ‘^(?!S)\p{L}’} |
+  Where { $_.PSChildName -Match '^(?!S)\p{L}'} |
     Select @{N = '.NET Framework'; E = {$_.PSChildName}}, version |
 Format-Table * -AutoSize
 
