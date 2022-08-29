@@ -23,6 +23,7 @@ Following table is result from this [decision path](decision-path.png).
 4. **WebAdministration** WMI Namespace requires **IIS Management Scripts and Tools** Windows feature enabled.
 5. WMI Namespaces for IIS 7.0 and later is **Root\WebAdministration**.
 6. WMI Namespaces for IIS 6.0 is : **Root\MicrosoftIISv2**.
+7. **AppCmd**.exe is the single command line tool for managing IIS7 and above.
 
 ## References
 
