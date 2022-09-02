@@ -49,22 +49,22 @@ function Create-CsvOutputObject {
     )
 
     $CsvOutput = ($OutputObject |
-      Select @{N = 'Host Name';                            E = {$_.Dns_HostName}},
-             @{N = 'OS Name';                              E = {$_.Os_Name}},
-             @{N = 'IIS Version';                          E = {$_.IIS_Version}},
-             @{N = 'Website ID';                           E = {$_.Website_Id}},
-             @{N = 'Website Name';                         E = {$_.Website_Name}},
-             @{N = 'Website State';                        E = {$_.Website_State}},
-             @{N = 'Website Physical Path';                E = {$_.Website_PhysicalPath}},
-             @{N = 'Website Binding';                      E = {$_.Website_Bindings}},
-             @{N = 'Website Application Pool';             E = {$_.Website_AppPool_Name}},
-             @{N = 'Website Application Pool State';       E = {$_.Website_AppPool_State}},
-             @{N = 'Website Application Pool CLR Version'; E = {$_.Website_AppPool_ManagedRuntimeVersion}},
-             @{N = 'Web App Name';                         E = {$_.WebApp_Name}},
-             @{N = 'Web App Physical Path';                E = {$_.WebApp_PhysicalPath}},
-             @{N = 'Web App Application Pool';             E = {$_.WebApp_AppPool_Name}},
-             @{N = 'Web App Application Pool State';       E = {$_.WebApp_AppPool_State}},
-             @{N = 'Web App Application Pool CLR Version'; E = {$_.WebApp_AppPool_ManagedRuntimeVersion}}
+      Select @{N = 'Host Name';                      E = {$_.Dns_HostName}},
+             @{N = 'OS Name';                        E = {$_.Os_Name}},
+             @{N = 'IIS Version';                    E = {$_.IIS_Version}},
+             @{N = 'Website ID';                     E = {$_.Website_Id}},
+             @{N = 'Website Name';                   E = {$_.Website_Name}},
+             @{N = 'Website State';                  E = {$_.Website_State}},
+             @{N = 'Website Physical Path';          E = {$_.Website_PhysicalPath}},
+             @{N = 'Website Binding';                E = {$_.Website_Bindings}},
+             @{N = 'Website Application Pool';       E = {$_.Website_AppPool_Name}},
+             @{N = 'Website Application Pool State'; E = {$_.Website_AppPool_State}},
+             @{N = 'Website CLR Version';            E = {$_.Website_AppPool_ManagedRuntimeVersion}},
+             @{N = 'Web App Name';                   E = {$_.WebApp_Name}},
+             @{N = 'Web App Physical Path';          E = {$_.WebApp_PhysicalPath}},
+             @{N = 'Web App Application Pool';       E = {$_.WebApp_AppPool_Name}},
+             @{N = 'Web App Application Pool State'; E = {$_.WebApp_AppPool_State}},
+             @{N = 'Web App CLR Version';            E = {$_.WebApp_AppPool_ManagedRuntimeVersion}}
     )
 
     return $CsvOutput
@@ -76,19 +76,17 @@ function Create-ConsoleOutputObject {
     )
 
     $ConsoleOutput = ($OutputObject |
-      Select @{N = 'Website ID';                           E = {$_.Website_Id}},
-             @{N = 'Website Name';                         E = {$_.Website_Name}},
-             @{N = 'Website State';                        E = {$_.Website_State}},
-             @{N = 'Website Physical Path';                E = {$_.Website_PhysicalPath}},
-             @{N = 'Website Binding';                      E = {$_.Website_Bindings}},
-             @{N = 'Application Pool';                     E = {$_.Website_AppPool_Name}},
-             @{N = 'Pool State';                           E = {$_.Website_AppPool_State}},
-             @{N = 'Pool CLR Version';                     E = {$_.Website_AppPool_ManagedRuntimeVersion}},
-             @{N = 'Web App Name';                         E = {$_.WebApp_Name}},
-             @{N = 'Web App Physical Path';                E = {$_.WebApp_PhysicalPath}},
-             @{N = 'Web App Application Pool';             E = {$_.WebApp_AppPool_Name}},
-             @{N = 'Web App Application Pool State';       E = {$_.WebApp_AppPool_State}},
-             @{N = 'Web App Application Pool CLR Version'; E = {$_.WebApp_AppPool_ManagedRuntimeVersion}}
+      Select @{N = 'Website ID';               E = {$_.Website_Id}},
+             @{N = 'Website Name';             E = {$_.Website_Name}},
+             @{N = 'Website State';            E = {$_.Website_State}},
+             @{N = 'Website Physical Path';    E = {$_.Website_PhysicalPath}},
+             @{N = 'Website Binding';          E = {$_.Website_Bindings}},
+             @{N = 'Application Pool';         E = {$_.Website_AppPool_Name}},
+             @{N = 'CLR Version';              E = {$_.Website_AppPool_ManagedRuntimeVersion}},
+             @{N = 'Web App Name';             E = {$_.WebApp_Name}},
+             @{N = 'Web App Physical Path';    E = {$_.WebApp_PhysicalPath}},
+             @{N = 'Web App Application Pool'; E = {$_.WebApp_AppPool_Name}},
+             @{N = 'Web App CLR Version';      E = {$_.WebApp_AppPool_ManagedRuntimeVersion}}
     )
 
     return $ConsoleOutput
@@ -277,10 +275,9 @@ Write-Output "| IIS Information |"
 Write-Output "-------------------"
 
 if (Is-IISInstalled) {
-    #Get-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\InetStp\ | Select-Object | Format-Table
-
     $IISInfo = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\InetStp' |
-                Select @{N = "Product Version"; E = {(Get-ItemProperty ($_.InstallPath + "\w3wp.exe")).VersionInfo.ProductVersion}},
+                Select @{N = 'Product';  E = {$_.SetupString}},
+                       @{N = "Product Version"; E = {(Get-ItemProperty ($_.InstallPath + "\w3wp.exe")).VersionInfo.ProductVersion}},
                        @{N = 'Version String';  E = {$_.VersionString}},
                        @{N = 'Install Path';    E = {$_.InstallPath}}
     )
@@ -347,11 +344,12 @@ if (Is-IISInstalled) {
              @{N = 'Website Binding';                E = {}},
              @{N = 'Website Application Pool';       E = {}},
              @{N = 'Website Pool State';             E = {}},
-             @{N = 'Website Pool CLR Version';       E = {}},
+             @{N = 'Website CLR Version';            E = {}},
              @{N = 'Web App Name';                   E = {}},
              @{N = 'Web App Physical Path';          E = {}},
              @{N = 'Web App Application Pool';       E = {}},
-             @{N = 'Web App Application Pool State'; E = {}})
+             @{N = 'Web App Application Pool State'; E = {}},
+             @{N = 'Web App CLR Version';            E = {}})
 
     Write-Csv $Output
 }
