@@ -16,7 +16,6 @@ If (WScript.Arguments.Count = 0) Then
     strComputer = "localhost"
 
     Wscript.StdOut.Write "Running the script against local computer..." & vbCrLf
-
     
     objShell.Run "cscript " & strScriptPath & " localhost whatever whatever y", 2, True
     
