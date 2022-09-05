@@ -94,7 +94,7 @@ Function WriteCsvOutputFile(bolIsIISInstalled, strIISVersion, arrWebsiteList)
     Const ForWriting = 2
 
     Dim objFSO : Set objFSO = CreateObject("Scripting.FileSystemObject")
-    Dim objCsvFile : Set objCsvFile = objFSO.CreateTextFile("C:\" & LCase(objComputerInfo.DNSHostName) & "_output.csv", ForWriting, True)
+    Dim objCsvFile : Set objCsvFile = objFSO.CreateTextFile("C:\iis-info\" & LCase(objComputerInfo.DNSHostName) & "_output.csv", ForWriting, True, False)
     Dim obj
     Dim strCsvOut
 

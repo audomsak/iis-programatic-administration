@@ -1,104 +1,123 @@
-# PowerShell For Windows
+# IIS Programatic Administration
 
-A repository contains some stuff relate to [PowerShell](https://docs.microsoft.com/en-us/powershell/) for Windows Operating System.
+## Summary
+
+Following table is result from this [decision path](decision-path.png).
+
+| Windows version            | Default PowerShell version | Windows Management Framework (WMF) 5.1 | IIS version | Script type                         | API, Interface             | Remoting                 |
+|----------------------------|--------------------|----------------------------------------|-------------|-------------------------------------|----------------------------|--------------------------|
+| Windows Server 2022        | 5.1                | Installed by default                   | 10          | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2019        | 5.1                | Installed by default                   | 10          | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2016        | 5.1                | Installed by default                   | 10          | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2012 R2     | 4.0                | Needs to be installed                   | 8.5         | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2012        | 3.0                | Needs to be installed                   | 8           | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2008 R2 SP1 | 2.0                | Needs to be installed                   | 7.5         | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2008        | N/A                | N/A                                    | 7.0         | VBScript                            | WMI, AppCmd.exe            | WMI Remoting             |
+| Windows Server 2003        | N/A                | N/A                                    | 6.0         | VBScript                            | WMI                        | WMI Remoting             |
+
+***Note***
+
+1. **IISAdministration** PowerShell module is available only in IIS 10.
+
+2. PowerShell (old) module for IIS is **WebAdministration**.
+
+3. **Get-ComputerInfo** PowerShell module requires WMF 5.1 to be installed.
+
+4. **WebAdministration** WMI Namespace requires **IIS Management Scripts and Tools** Windows feature enabled.
+
+5. WMI Namespaces for IIS 7.0 and later is **\ROOT\WebAdministration**.
+
+6. WMI Namespaces for IIS 6.0 is : **\ROOT\MicrosoftIISv2**.
+
+7. **AppCmd.exe** is the single command line tool for managing IIS 7 onward.
+
+## WMI Remoting
+
+### System Requirements
+
+#### Windows Firewall
+
+For Windows Server 2003, [see this document](wmi-firewall-config.pdf)
+
+**Applicable for:** Windows Server 2008, 2012, 2016
+
+Following apps need to be allowed to communicate through firewall:
+
+* Windows Management Instrumentation (WMI)
+
+#### Windows Defender Firewall
+
+**Applicable for:** Windows Server 2019, Windows Server 2022
+
+Following apps need to be allowed to communicate through firewall:
+
+* Windows Management Instrumentation (WMI)
+
+#### Windows Services
+
+Following services need to be started on target/remote computer:
+
+* Windows Management Instrumentation
+
+#### User Account
+
+A local or domain user account in the Administrtor group is required.
+
+### Running the script
+
+[IIS Server Info Collector](script/iis-server-info-collector.vbs) and [Runner](script/iis-server-info-collector-runner.vbs) VBScripts are provided.
+
+Following these steps to query IIS information on local computer (localhost):
+
+1. Open Command Prompt (CMD)
+
+2. Type `cscript iis-server-info-collector-runner.vbs` then press **Enter**
+
+3. The script will produce some output to console and generate CSV file in **C:\iis-info** folder with filename format as `{DNS Hostname}_output.csv`
+
+Following these steps to query IIS information on remote computer(s):
+
+1. Create a text file contains a list of remote computer hostname(s) like this:
+
+   ```txt
+    server1
+    server2
+    server3.example.com
+   ```
+
+2. Open Command Prompt (CMD)
+
+3. Type `cscript iis-server-info-collector-runner.vbs {path to text file from step 1}` then press **Enter**
+
+4. You will be asked whether you're running the script on a computer lives in the same domain as remote computer(s) or not.
+   * If Yes, enter **y**. The script will use current logged in account for remote authentication.
+   * If No, you have to enter username and password for login to remote computer(s). This usename should be able to login to all remote computer(s) (e.g. domain user) listed in the text file in the step 1.
+
+The script will produce some output to console and generate CSV file for each remote computer in **C:\iis-info** folder with filename format as `{DNS Hostname}_output.csv`. In case of there are more than 1 remote computers, the script will also genereate a `iis-info-all.csv` file that all `*_output.csv` content are merged.
+
+
+## PowerShell (PS) Remoting
+
+### System Requirements
+
+
 
 ## References
 
-### PowerShell
+* [IIS Official Documentation](https://docs.microsoft.com/en-us/iis/)
 
-[PowerShell: A cheat sheet](https://www.techrepublic.com/article/powershell-the-smart-persons-guide/)
+* [Internet Information Services (IIS) releases](https://docs.microsoft.com/en-us/lifecycle/products/internet-information-services-iis)
 
-### PowerShell Tutorials
+* [IIS Previous Versions Documentation](https://docs.microsoft.com/en-us/previous-versions/iis/)
 
-* [Introduction to PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/learn/ps101/00-introduction)
+* [IIS WMI Provider Architecture](https://docs.microsoft.com/en-us/previous-versions/iis/6.0-sdk/ms525673(v=vs.90))
 
-* [Powershell Tutorial for Beginners: Learn Powershell Scripting](https://www.guru99.com/powershell-tutorial.html)
+* [IIS Administration Technologies](https://docs.microsoft.com/en-us/previous-versions/iis/6.0-sdk/ms525806(v=vs.90))
 
-* [PowerShell For Beginners Full Course](https://youtu.be/UVUd9_k9C6A)
+* [Using WMI to Configure IIS](https://docs.microsoft.com/en-us/previous-versions/iis/6.0-sdk/ms525309(v=vs.90))
 
-* [ATA Learning - PowerShell Tutorials](https://adamtheautomator.com/tutorials/?_tags=powershell)
+* [An Introduction to Windows PowerShell and IIS](https://docs.microsoft.com/en-us/iis/manage/powershell/an-introduction-to-windows-powershell-and-iis)
 
-### PowerShell Versioning
+* [PowerShell and IIS: 20 practical examples](https://octopus.com/blog/iis-powershell)
 
-* PowerShell versions [[1]](https://en.wikipedia.org/wiki/PowerShell#Versions), [[2]](https://techgenix.com/overview-of-powershell-versions-and-how-to-check-what-version-you-have/), [[3]](https://www.techthoughts.info/powershell-history-and-current-state/#PowerShell_Version_Information)
-
-* [Differences between PowerShell versions
-](https://4sysops.com/wiki/differences-between-powershell-versions/)
-
-* [Differences between Windows PowerShell 5.1 and PowerShell 7.x](https://docs.microsoft.com/en-us/powershell/scripting/whats-new/differences-from-windows-powershell)
-
-* [Windows PowerShell System Requirements](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements)
-
-* [Upgrading existing Windows PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/installing-windows-powershell#upgrading-existing-windows-powershell)
-
-* [Difference Between Windows PowerShell And PowerShell Core](https://www.itechtics.com/windows-powershell-vs-powershell-core/)
-
-### PowerShell Remoting (PSRemoting)
-
-* [PowerShell Remoting](https://docs.microsoft.com/en-us/powershell/scripting/learn/ps101/08-powershell-remoting)
-
-* [About Remoting](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_remote)
-
-* [Remoting Requirements](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_remote_requirements)
-
-* [Running Remote Commands](https://docs.microsoft.com/en-us/powershell/scripting/learn/remoting/running-remote-commands)
-
-* [Remote Operation Troubleshooting](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_remote_troubleshooting)
-
-* [How to Enable PSRemoting (Locally and Remotely)](https://adamtheautomator.com/enable-psremoting/)
-
-* [Enable-PSRemoting for Remote Commands](https://shellgeek.com/powershell-enable-psremoting/)
-
-* [PSRemoting Deep Dive Tutorial](https://adamtheautomator.com/psremoting/)
-
-* [Remoting FAQ](https://docs.microsoft.com/en-us/powershell/scripting/learn/remoting/powershell-remoting-faq)
-
-### Windows Management Instrumentation (WMI) and Windows Management Infrastructure (MI)
-
-* [Windows Management Infrastructure (MI)](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/wmi_v2/windows-management-infrastructure)
-
-* [Windows Management Instrumentation (WMI)](https://docs.microsoft.com/en-us/windows/win32/wmisdk/wmi-start-page)
-
-* [WMI on Wiki](https://en.wikipedia.org/wiki/Windows_Management_Instrumentation)
-
-* [WMI/MI/OMI Providers](https://docs.microsoft.com/en-us/windows/win32/srvnodes/wmi-mi-omi-providers)
-
-* [WMI Vs CIM: What's the difference?](https://www.ipswitch.com/blog/get-ciminstance-vs-get-wmiobject-whats-the-difference)
-
-* [WMI or CIM in your PowerShell scripts: Which should you use?](https://techgenix.com/wmi-or-cim-powershell/)
-
-* [Best WMI Tools & Software for Windows Management Instrumentation Administration!](https://www.networkmanagementsoftware.com/top-5-wmi-tool-downloads)
-
-* [WMI Remoting](https://docs.microsoft.com/en-us/windows/win32/wmisdk/connecting-to-wmi-on-a-remote-computer)
-
-* [How to enable access to WMI](https://iphostmonitor.com/kb/remote-wmi-monitoring.html)
-
-* [Creating a WMI Script](https://docs.microsoft.com/en-us/windows/win32/wmisdk/creating-a-wmi-script)
-
-* [Windows Remote Management and WMI](https://docs.microsoft.com/en-us/windows/win32/winrm/windows-remote-management-and-wmi)
-
-### .NET Framework
-
-* [.NET Framework versions and dependencies](https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies)
-
-* [Overview of .NET Framework release history](https://en.wikipedia.org/wiki/.NET_Framework_version_history#Overview)
-
-* [Migration guide](https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/)
-
-### Windows
-
-* [Windows previous versions documentation](https://docs.microsoft.com/en-us/previous-versions/windows/)
-
-* [Windows Remote Management (WinRM)](https://docs.microsoft.com/en-us/windows/win32/winrm/portal)
-
-* [Windows Server Management](https://docs.microsoft.com/en-us/windows-server/administration/manage-windows-server)
-
-### Code Samples and Gallery
-
-* [Browse code samples](https://docs.microsoft.com/en-us/samples/browse/)
-
-* [PowerShell Gallery](https://www.powershellgallery.com/)
-
-* [Windows Classic Samples](https://github.com/Microsoft/Windows-classic-samples)
-
-* [MSDN Code Gallery Microsoft Samples](https://github.com/microsoftarchive/msdn-code-gallery-microsoft)
+* [Enabling IIS Remote Management Using PowerShell](https://mcpmag.com/articles/2014/10/21/enabling-iis-remote-management.aspx)

@@ -1,5 +1,8 @@
 Option Explicit
 
+Const OUTPUT_FOLDER = "c:\iis-info"
+Const ForReading = 1
+
 Dim strComputer
 Dim strUser
 Dim strPassword
@@ -7,9 +10,15 @@ Dim strInSameDomain
 Dim strScriptPath
 Dim objShell
 Dim objShellExec
+Dim objFso
 
 Set objShell = CreateObject("WScript.Shell")
 strScriptPath = Replace(WScript.ScriptFullName, WScript.ScriptName, "") & "iis-server-info-collector.vbs"
+
+Set objFso = CreateObject("Scripting.FileSystemObject")
+If (Not objFso.FolderExists(OUTPUT_FOLDER)) Then
+    objFso.CreateFolder(OUTPUT_FOLDER)
+End If
 
 If (WScript.Arguments.Count = 0) Then
     'Dim wshNetwork : Set wshNetwork = WScript.CreateObject("WScript.Network")
@@ -51,8 +60,7 @@ Else
     Dim filename
     filename = WScript.Arguments.Item(0)
 
-    Dim objFso : Set objFso = CreateObject("Scripting.FileSystemObject")
-    Dim objFile : Set objFile = objFso.OpenTextFile(filename)
+    Dim objFile : Set objFile = objFso.OpenTextFile(filename, ForReading)
 
     Do Until objFile.AtEndOfStream
         strComputer = objFile.ReadLine
@@ -68,9 +76,14 @@ Else
 
     objFile.Close
 
+    MergeCsvFile()
+
     WScript.StdOut.WriteLine ""
     WScript.StdOut.Write "The script was run successfully."
 End If
+
+Set objShell = Nothing
+Set objFso = Nothing
 
 Function ExecuteScript(strComputer, strCommand)
     Set objShellExec = objShell.Exec(strCommand)
@@ -84,4 +97,50 @@ Function ExecuteScript(strComputer, strCommand)
     Do Until objShellExec.StdErr.AtEndOfStream
         WScript.StdOut.WriteLine objShellExec.StdErr.ReadLine
     Loop
+End Function
+
+Function MergeCsvFile()
+    Dim strOutputTxtFilePath
+    Dim strOutputCsvFilePath
+
+    strOutputCsvFilePath = OUTPUT_FOLDER & "\iis-info-all.csv"
+    strOutputTxtFilePath = OUTPUT_FOLDER & "\iis-info-all.txt"
+
+    ' Delete existing txt and csv files
+    If (objFso.FileExists(strOutputCsvFilePath)) Then
+        objFso.DeleteFile strOutputCsvFilePath
+    End If
+
+    Dim objOutputFolder : Set objOutputFolder = objFso.GetFolder(OUTPUT_FOLDER)
+    Dim colFiles : Set colFiles = objOutputFolder.Files
+    Dim objFileItem
+    Dim strText
+
+    If (Not IsNull(colFiles) And colFiles.Count > 1) Then
+        Dim objOutTxtFile : Set objOutTxtFile = objFso.CreateTextFile(strOutputTxtFilePath, True, False)
+
+        objOutTxtFile.WriteLine "Host Name,OS Name,IIS Version,Website ID,Website Name,Website State,Website Physical Path,Website Binding," & _
+                "Website Application Pool,Website Application Pool State,Website CLR Version,Web App Name," & _
+                "Web App Physical Path,Web App Application Pool,Web App Application Pool State,Web App CLR Version"
+
+        For Each objFileItem In colFiles
+            If (objFso.GetExtensionName(objFileItem) = "csv") Then
+                Dim objCsvFile : Set objCsvFile = objFso.OpenTextFile(objFileItem.Path, ForReading, False, 0)
+
+                ' Discard headers
+                objCsvFile.SkipLine
+
+                Do Until objCsvFile.AtEndOfStream
+                    strText = objCsvFile.ReadLine
+                   objOutTxtFile.WriteLine strText
+                Loop
+                objCsvFile.Close
+            End If
+        Next
+        objOutTxtFile.Close
+
+        'Rename txt to csv file
+        Set objOutTxtFile = objFso.GetFile(strOutputTxtFilePath)
+        objOutTxtFile.Name = Replace(objOutTxtFile.Name, ".txt", ".csv")
+    End If
 End Function
