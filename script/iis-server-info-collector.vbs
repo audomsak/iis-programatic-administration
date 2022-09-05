@@ -8,11 +8,11 @@ Const CIMV2_NAMESPACE = "\ROOT\CIMV2"
 Const WEB_ADMINISTRATION_NAMESPACE = "\ROOT\WebAdministration"
 Const MICROSOFT_IISV2_NAMESPACE = "\ROOT\MicrosoftIISv2"
 
-'SWbemSecurity Impersonation Level 
+'SWbemSecurity Impersonation Level
 'https://docs.microsoft.com/en-us/windows/win32/api/wbemdisp/ne-wbemdisp-wbemimpersonationlevelenum
 Const wbemImpersonationLevelImpersonate = 3
 
-'SWbemSecurity Authentication Level 
+'SWbemSecurity Authentication Level
 'https://docs.microsoft.com/en-us/windows/win32/api/wbemdisp/ne-wbemdisp-wbemauthenticationlevelenum
 Const wbemAuthenticationLevelPktPrivacy = 6
 
@@ -83,6 +83,9 @@ Else
     WriteCsvOutputFile False, "", Nothing
 End If
 
+' ------------------ Write CSV output file -----------------------------------------
+
+
 '
 ' ----------------------------------------------------------------------------------
 ' Functions
@@ -98,10 +101,19 @@ Function WriteCsvOutputFile(bolIsIISInstalled, strIISVersion, arrWebsiteList)
     strCsvOut = "Host Name,OS Name,IIS Version,Website ID,Website Name,Website State,Website Physical Path,Website Binding," & _
                 "Website Application Pool,Website Application Pool State,Website CLR Version,Web App Name," & _
                 "Web App Physical Path,Web App Application Pool,Web App Application Pool State,Web App CLR Version"
-    
+
     objCsvFile.WriteLine strCsvOut
-    
-    If (bolIsIISInstalled And arrWebsiteList.Count > 0) Then
+
+    if (bolIsIISInstalled = False) Then
+        strCsvOut = objComputerInfo.DNSHostName & "," & objComputerInfo.OSName & ",Not Installed,,,,,,,,,,,,,"
+        objCsvFile.WriteLine strCsvOut
+
+    ElseIf (bolIsIISInstalled And (IsNull(arrWebsiteList) Or arrWebsiteList.Count = 0)) Then
+        Dim strIISValue
+        strIISValue = strIISProduct & " is installed but there isn't any website"
+        strCsvOut = objComputerInfo.DNSHostName & "," & objComputerInfo.OSName & "," & strIISValue & ",,,,,,,,,,,,,"
+        objCsvFile.WriteLine strCsvOut
+    Else
         Dim objWebsite
         For Each objWebsite In arrWebsiteList
             strCsvOut = ""
@@ -130,13 +142,10 @@ Function WriteCsvOutputFile(bolIsIISInstalled, strIISVersion, arrWebsiteList)
 
             objCsvFile.WriteLine strCsvOut
         Next
-    Else
-        strCsvOut = objComputerInfo.DNSHostName & "," & objComputerInfo.OSName & ",Not Installed,,,,,,,,,,,,," 
-        objCsvFile.WriteLine strCsvOut
-    End If   
+    End If
 End Function
 
-Function CollectWebSiteAndWebApplicationInfo(strIISProduct) 
+Function CollectWebSiteAndWebApplicationInfo(strIISProduct)
     Dim arrWebsiteList : Set arrWebsiteList = CreateObject("System.Collections.ArrayList")
 
     Dim strQuery
@@ -155,7 +164,7 @@ Function CollectWebSiteAndWebApplicationInfo(strIISProduct)
         dicServerState.Add 7, "Continuing"
 
         Dim objSWbemServices: Set objSWbemServices = GetSWbemServices(MICROSOFT_IISV2_NAMESPACE)
-        
+
         strQuery = "SELECT Name, ServerState FROM IISWebServer"
         Set colItems = objSWbemServices.ExecQuery(strQuery)
 
@@ -185,9 +194,9 @@ Function CollectWebSiteAndWebApplicationInfo(strIISProduct)
                     If (Instr(strScriptProcessor, "v1.1")) Then
                         strClrVersion = "v1.1"
                     ElseIf (Instr(strScriptProcessor, "v2.0") Or Instr(strScriptProcessor, "v3.0") Or Instr(strScriptProcessor, "v3.5")) Then
-                        strClrVersion = "v2.0"                   
+                        strClrVersion = "v2.0"
                     ElseIf (Instr(strScriptProcessor, "v4.0") Or Instr(strScriptProcessor, "v4.5")) Then
-                        strClrVersion = "v4.0"                   
+                        strClrVersion = "v4.0"
                     End If
                     Exit For
                 End If
@@ -207,7 +216,7 @@ Function CollectWebSiteAndWebApplicationInfo(strIISProduct)
 
             'Note. There is no concept of web application under website in IIS6
             'so no need to query for web application
-            
+
             arrWebsiteList.Add objWebsite
         Next
     Else
@@ -229,15 +238,15 @@ Function CollectWebSiteAndWebApplicationInfo(strIISProduct)
             For Each objBinding In objItem.Bindings
                 strBinding = strBinding & objBinding.Protocol & " " & objBinding.BindingInformation & ";"
             Next
-            
-            With objWebsite            
+
+            With objWebsite
                 .ID = objItem.ID
                 .Name = objItem.Name
                 .State = dicSiteState(objItem.GetState)
                 .PhysicalPath = GetPhysicalPath(objItem.Name, "/", "/", strIISProduct)
                 .Binding = Left(strBinding, Len(strBinding) - 1)
                 Set .ApplicationPool = GetApplicationPoolBySiteNameAndPath(objItem.Name, "/", strIISProduct)
-            End With 
+            End With
 
             arrWebsiteList.Add objWebsite
 
@@ -264,7 +273,7 @@ Function CollectWebSiteAndWebApplicationInfo(strIISProduct)
                         .PhysicalPath = GetPhysicalPath(objWebsite.Name, "/", objApp.Path, strIISProduct)
                         Set .ApplicationPool =  GetApplicationPoolBySiteNameAndPath(objItem.Name, objApp.Path, strIISProduct)
                     End With
-                                
+
                     Set objParentWebsite.WebApplication = objWebApplication
                     arrWebsiteList.Add objParentWebsite
                 End If
@@ -288,7 +297,7 @@ Function CollectWebSiteAndWebApplicationInfo(strIISProduct)
     Dim arrWebAppCLRVersionList : Set arrWebAppCLRVersionList = CreateObject("System.Collections.ArrayList")
 
     Dim dicOutput : Set dicOutput = CreateObject("Scripting.Dictionary")
-    
+
     For Each objWebsite In arrWebsiteList
         arrWebsiteIdList.Add objWebsite.ID
         arrWebsiteNameList.Add objWebsite.Name
@@ -337,11 +346,11 @@ Function GetApplicationPoolBySiteNameAndPath(strSiteName, strPath, strIISProduct
 
     strQuery = "SELECT ApplicationPool FROM Application WHERE SiteName='" & strSiteName & "' AND Path='" & strPath & "'"
     Set colItems = ExecuteWMIQuery(WEB_ADMINISTRATION_NAMESPACE, strQuery)
-    
+
     For Each objItem In colItems
         strAppPoolName = objItem.ApplicationPool
     Next
-    
+
     Set GetApplicationPoolBySiteNameAndPath = GetApplicationPool(strIISProduct, strAppPoolName)(0)
 End function
 
@@ -384,11 +393,11 @@ Function CollectIISApplicationPoolInfo(strIISProduct)
 
         ' Application Pool's StartMode is available in IIS 7.5 onward
         If (Instr(strIISProduct, "6.0") Or Instr(strIISProduct, "7.0")) Then
-            arrAppPoolStartModeList.Add "N/A"                           
+            arrAppPoolStartModeList.Add "N/A"
         Else
             arrAppPoolStartModeList.Add objAppPool.StartMode
         End If
-        
+
         ' Application Pool's ManagedPipelineMode and ManagedRuntimeVersion is available in IIS 7 onward
         ' (Managed) RuntimeVersion in IIS 6 is set at Web Site level
         If (Instr(strIISProduct, "6.0")) Then
@@ -451,7 +460,7 @@ Function GetApplicationPool(strIISProduct, strPoolName)
         For Each objItem In colItems
             Set objAppPool = New ApplicationPoolInfo
             Dim arrPoolName
-            
+
             arrPoolName = Split(objItem.Name, "/")
             With objAppPool
                 .Name = arrPoolName(Ubound(arrPoolName))
@@ -678,7 +687,7 @@ Function GetSWbemServices(strNamespace)
 
         Dim objSWbemLocator : Set objSWbemLocator = CreateObject("WbemScripting.SWbemLocator")
         Set objSWbemServices = objSWbemLocator.ConnectServer(strComputer, strNamespace, strUser, strPassword)
-    
+
         objSWbemServices.Security_.ImpersonationLevel = wbemImpersonationLevelImpersonate
         objSWbemServices.Security_.AuthenticationLevel = wbemAuthenticationLevelPktPrivacy
     End If
@@ -764,7 +773,7 @@ Function WriteMultipleOutputTable(dicOutput)
 
     Dim strOut
     Dim iIndex
-    
+
     For iIndex = 0 To (iMaxValueCount - 1) Step 1
         For Each strColHeaderKey In dicOutput.Keys
             Dim strValue
@@ -1064,3 +1073,4 @@ Class WebApplicationInfo
         Set objAppPool = objAppPoolParam
     End Property
 End Class
+>>>>>>> 683c49f (various changes)

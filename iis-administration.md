@@ -9,9 +9,9 @@ Following table is result from this [decision path](decision-path.png).
 | Windows Server 2022        | 5.1                | Installed by default                   | 10          | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
 | Windows Server 2019        | 5.1                | Installed by default                   | 10          | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
 | Windows Server 2016        | 5.1                | Installed by default                   | 10          | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
-| Windows Server 2012 R2     | 4.0                | Need to be installed                   | 8.5         | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
-| Windows Server 2012        | 3.0                | Need to be installed                   | 8           | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
-| Windows Server 2008 R2 SP1 | 2.0                | Need to be installed                   | 7.5         | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2012 R2     | 4.0                | Needs to be installed                   | 8.5         | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2012        | 3.0                | Needs to be installed                   | 8           | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
+| Windows Server 2008 R2 SP1 | 2.0                | Needs to be installed                   | 7.5         | PS Script / VBScript (no PS Module) | PS Module, WMI, AppCmd.exe | PS Remoting / WMI Remoting |
 | Windows Server 2008        | N/A                | N/A                                    | 7.0         | VBScript                            | WMI, AppCmd.exe            | WMI Remoting             |
 | Windows Server 2003        | N/A                | N/A                                    | 6.0         | VBScript                            | WMI                        | WMI Remoting             |
 
@@ -24,6 +24,42 @@ Following table is result from this [decision path](decision-path.png).
 5. WMI Namespaces for IIS 7.0 and later is **Root\WebAdministration**.
 6. WMI Namespaces for IIS 6.0 is : **Root\MicrosoftIISv2**.
 7. **AppCmd**.exe is the single command line tool for managing IIS7 and above.
+
+## WMI Remoting
+
+### System Requirements
+
+#### Windows Firewall
+
+For Windows Server 2003 [see this document](wmi-firewall-config.pdf)
+
+**Applicable for:** Windows Server 2008, 2012, 2016
+
+Following apps need to be allowed to communicate through firewall:
+
+* Windows Management Instrumentation (WMI)
+
+#### Windows Defender Firewall
+
+**Applicable for:** Windows Server 2019, Windows Server 2022
+
+Following apps need to be allowed to communicate through firewall:
+
+* Windows Management Instrumentation (WMI)
+
+#### Windows Services
+
+Following services need to be started on target/remote computer:
+
+* Windows Management Instrumentation
+
+#### User Account
+
+A local or domain user account in the Administrtor group is required.
+
+## PowerShell (PS) Remoting
+
+### System Requirements
 
 ## References
 
