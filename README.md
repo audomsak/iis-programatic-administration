@@ -67,7 +67,7 @@ A local or domain user account in the Administrtor group is required.
 
 [IIS Server Info Collector](script/iis-server-info-collector.vbs) and [Runner](script/iis-server-info-collector-runner.vbs) VBScripts are provided.
 
-Following these steps to query IIS information on local computer (localhost):
+* Following these steps to query IIS information on local computer (localhost):
 
 1. Open Command Prompt (CMD)
 
@@ -75,7 +75,7 @@ Following these steps to query IIS information on local computer (localhost):
 
 3. The script will produce some output to console and generate CSV file in **C:\iis-info** folder with filename format as `{DNS Hostname}_output.csv`
 
-Following these steps to query IIS information on remote computer(s):
+* Following these steps to query IIS information on remote computer(s):
 
 1. Create a text file contains a list of remote computer hostname(s) like this:
 
