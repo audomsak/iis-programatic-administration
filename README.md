@@ -27,7 +27,7 @@ Following table is result from this [decision path](decision-path.png).
 
 5. WMI Namespaces for IIS 7.0 and later is **\ROOT\WebAdministration**.
 
-6. WMI Namespaces for IIS 6.0 is : **\ROOT\MicrosoftIISv2**.
+6. WMI Namespaces for IIS 6.0 is **\ROOT\MicrosoftIISv2**.
 
 7. **AppCmd.exe** is the single command line tool for managing IIS 7 onward.
 
@@ -121,3 +121,9 @@ The script will produce some output to console and generate CSV file for each re
 * [PowerShell and IIS: 20 practical examples](https://octopus.com/blog/iis-powershell)
 
 * [Enabling IIS Remote Management Using PowerShell](https://mcpmag.com/articles/2014/10/21/enabling-iis-remote-management.aspx)
+
+* [Enable PSRemoting with Group Policy](https://www.serveracademy.com/enable-psremoting-with-group-policy/)
+
+* [Setting up WMI-Access Through Active Directory & Group Policy](https://support.infrasightlabs.com/help-pages/setting-up-wmi-access-through-ad-gpo/)
+
+* [Set Up a Group Policy to Allow WMI on Your Domain](https://cherwellsupport.com/webhelp/en/5.0/3295.htm)
