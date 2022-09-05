@@ -1073,4 +1073,3 @@ Class WebApplicationInfo
         Set objAppPool = objAppPoolParam
     End Property
 End Class
->>>>>>> 683c49f (various changes)
