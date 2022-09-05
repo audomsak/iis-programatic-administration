@@ -1,6 +1,6 @@
 # PowerShell For Windows
 
-A repository contains some stuff relate to [PowerShell](https://docs.microsoft.com/en-us/powershell/) for Windows Operating System.
+Some useful references about [PowerShell](https://docs.microsoft.com/en-us/powershell/) for Windows Operating System.
 
 ## References
 
