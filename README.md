@@ -100,6 +100,38 @@ The script will produce some output to console and generate CSV file for each re
 
 ### System Requirements
 
+[Remoting Requirements](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_remote_requirements?view=powershell-5.1)
+
+#### Windows Firewall
+
+**Applicable for:** Windows Server 2008, 2012, 2016
+
+Following apps need to be allowed to communicate through firewall:
+
+* Windows Remote Management
+
+#### Windows Defender Firewall
+
+**Applicable for:** Windows Server 2019, Windows Server 2022
+
+Following apps need to be allowed to communicate through firewall:
+
+* Windows Remote Management
+
+#### Windows Services
+
+Following services need to be started on target/remote computer:
+
+* Windows Remote Management (WS-Management)
+
+#### User Account
+
+A local or domain user account in the Administrtor group is required.
+
+### Running the script
+
+[IIS Server Info Collector](script/iis-server-info-collector.ps1) and [Runner](script/iis-server-info-collector-runner.ps1) PowerShell scripts are provided. The steps to run the script are same as in the [WMI Remoting](#wmi-remoting) section except the script name - use `.ps1` script instead of `.vbs`.
+
 
 
 ## References

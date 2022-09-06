@@ -88,7 +88,7 @@ Set objFso = Nothing
 Function ExecuteScript(strComputer, strCommand)
     Set objShellExec = objShell.Exec(strCommand)
 
-    WScript.StdOut.WriteLine "Running the script against " & strComputer & " remote computer..." & vbCrLf
+    WScript.StdOut.WriteLine "Running the script against " & strComputer & " computer..." & vbCrLf
 
     Do Until objShellExec.StdOut.AtEndOfStream
         WScript.StdOut.WriteLine objShellExec.StdOut.ReadLine

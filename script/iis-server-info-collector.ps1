@@ -97,7 +97,7 @@ function Write-Csv() {
         [parameter(mandatory = $true)][object] $CsvOutput
     )
 
-    $OutputPath = "c:\" + $ComputerInfo.CsDNSHostName.ToLower() + "_output.csv"
+    $OutputPath = "c:\iis-info\" + $ComputerInfo.CsDNSHostName.ToLower() + "_output.csv"
     $CsvOutput | Export-Csv $OutputPath -NoTypeInformation
 }
 
@@ -219,13 +219,11 @@ function Map-IISAppPool {
 #######################################################################################
 # ENTRY POINT
 #######################################################################################
+$OutputPath = "c:\iis-info"
 
-$PsVersion = "PowerShell Version: " + $PSVersionTable.PSVersion
-Write-Output ""
-Write-Output $PsVersion
-
-$Policy=Get-ExecutionPolicy
-Write-Output "Execution Policy for current session: $Policy"
+if (!(Test-Path $OutputPath)) {
+    New-Item $OutputPath -ItemType Directory
+}
 
 Write-Output ""
 Write-Output "------------------------------"
