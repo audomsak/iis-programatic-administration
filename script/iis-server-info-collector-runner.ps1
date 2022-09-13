@@ -28,7 +28,7 @@ if ($args -eq $null -or $args.count -eq 0) {
     $IsInSameDomain = Read-Host -Prompt "Are you running the script on the machine that joined the same domain as remote servers? (y/n)"
     $RequireCredential
 
-    if ($isInSameDomain -eq "y") {
+    if ($IsInSameDomain -eq "y") {
         $RequireCredential = $false
     } else {
         $RequireCredential = $true
