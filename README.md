@@ -69,11 +69,11 @@ A local or domain user account in the Administrtor group is required.
 
 * Following these steps to query IIS information on local computer (localhost):
 
-1. Open Command Prompt (CMD)
+  1. Open Command Prompt (CMD)
 
-2. Type `cscript iis-server-info-collector-runner.vbs` then press **Enter**
+  2. Type `cscript iis-server-info-collector-runner.vbs` then press **Enter**
 
-3. The script will produce some output to console and generate CSV file in **C:\iis-info** folder with filename format as `{DNS Hostname}_output.csv`
+  3. The script will produce some output to console and generate CSV file in **C:\iis-info** folder with filename format as `{DNS Hostname}_output.csv`
 
 * Following these steps to query IIS information on remote computer(s):
 
