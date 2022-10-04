@@ -77,24 +77,23 @@ A local or domain user account in the Administrtor group is required.
 
 * Following these steps to query IIS information on remote computer(s):
 
-1. Create a text file contains a list of remote computer hostname(s) like this:
+  1. Create a text file contains a list of remote computer hostname(s) like this:
 
-   ```txt
-    server1
-    server2
-    server3.example.com
-   ```
+     ```txt
+      server1
+      server2
+      server3.example.com
+     ```
 
-2. Open Command Prompt (CMD)
+  2. Open Command Prompt (CMD)
 
-3. Type `cscript iis-server-info-collector-runner.vbs {path to text file from step 1}` then press **Enter**
+  3. Type `cscript iis-server-info-collector-runner.vbs {path to text file from step 1}` then press **Enter**
 
-4. You will be asked whether you're running the script on a computer lives in the same domain as remote computer(s) or not.
-   * If Yes, enter **y**. The script will use current logged in account for remote authentication.
-   * If No, you have to enter username and password for login to remote computer(s). This usename should be able to login to all remote computer(s) (e.g. domain user) listed in the text file in the step 1.
+  4. You will be asked whether you're running the script on a computer lives in the same domain as remote computer(s) or not.
+     * If Yes, enter **y**. The script will use current logged in account for remote authentication.
+     * If No, you have to enter username and password for login to remote computer(s). This usename should be able to login to all remote computer(s) (e.g. domain user) listed in the text file in the step 1.
 
-The script will produce some output to console and generate CSV file for each remote computer in **C:\iis-info** folder with filename format as `{DNS Hostname}_output.csv`. In case of there are more than 1 remote computers, the script will also genereate a `iis-info-all.csv` file that all `*_output.csv` content are merged.
-
+  The script will produce some output to console and generate CSV file for each remote computer in **C:\iis-info** folder with filename format as `{DNS Hostname}_output.csv`. In case of there are more than 1 remote computers, the script will also genereate a `iis-info-all.csv` file that all `*_output.csv` content are merged.
 
 ## PowerShell (PS) Remoting
 
